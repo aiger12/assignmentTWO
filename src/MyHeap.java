@@ -14,7 +14,7 @@ public class MyHeap<T extends Comparable<T>> {
         pq[t]=pq[1];
         pq[1]=k;
         maxHeapify(pq,pq[1]);
-        remove(pq[pq.length]); //method remove(T item) from MyArray
+        remove(pq[pq.length]); //method remove(T item)
         return (T)pq[1];
     }
     boolean remove(T item){
