@@ -1,10 +1,11 @@
 public class MyHeap<T extends Comparable<T>> {
     private T[] pq;
-    private int N = 0; //length of an array
+    private int capacity;
+    private int pos=0;
 
     void add(T item) {
-        pq[N++] = item;
-        minHeapify(N++, pq);
+        pq[pos++] = item;
+        minHeapify(++pos, pq);
     }
 
     T removeRoot() {
@@ -12,12 +13,18 @@ public class MyHeap<T extends Comparable<T>> {
         T k= pq[t];
         pq[t]=pq[1];
         pq[1]=k;
-        maxHeapify(pq);
+        maxHeapify(pq,pq[1]);
+        remove(pq[pq.length]); //method remove(T item) from MyArray
         return (T)pq[1];
     }
-
-    boolean remove(T item) {
-      return true;
+    boolean remove(T item){
+        for(int i=1;i<pq.length;i++){
+            if(item.equals(pq[i])){
+                pq[i]=pq[i+1];
+                return true;
+            }
+        }
+        return false;
     }
 
     private void minHeapify(int N, T[] pq) { //min item is root
@@ -31,16 +38,22 @@ public class MyHeap<T extends Comparable<T>> {
             }
         } //our array is sorted by minheapify(root is min item)
     }
-    private void maxHeapify(T[] pq) { //max item will root
-        for(int i= pq.length;i>0;i--){
-            for(int j=i;j>1;j=j/2){
-                if (pq[j].compareTo(pq[j/2])>0) {
-                    T k=pq[j];
-                    pq[j]=pq[j/2];
-                    pq[j/2]=k;
-                }
-            }
-        } //our array is sorted by minheapify(root is min item)
+    public T maxHeapify(T[] pq,T value) {//max item will be root
+        if(pos==capacity){ return pq[pq.length];} else {
+         pq[pos++]=value;
+         T child=pq[pos-1];
+         T parent=pq[(pos-1)/2];
+         while(child.compareTo(parent)>0) {
+             T tmp = pq[pos - 1];
+             pq[pos - 1] = pq[(pos - 1) / 2];
+             pq[(pos - 1) / 2] = tmp;
+
+             child = parent;
+             maxHeapify(pq, pq[pos++]); //here i use recursion
+         }
+         }
+       return (T)pq[pq.length];
+
     }
 
     /*private void maxHeapify(int N,T[]pq){
@@ -57,8 +70,4 @@ public class MyHeap<T extends Comparable<T>> {
             }
         }
     }*/
-
-
-
-   //
 }
